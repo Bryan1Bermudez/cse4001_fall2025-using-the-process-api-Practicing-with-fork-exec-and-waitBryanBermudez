@@ -57,6 +57,37 @@ Use the Linux in your CSE4001 container. If you are using macOS, you may use the
 //the value in the child process is the same as the parent process, 100
 // However, when the value changes in the parent both the child and the parent reflect the change
 // if only the child changes the value only the child will reflect the change of x
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+
+int main(int argc, char *argv[])
+{
+    printf("hello world (pid:%d)\n", (int) getpid());
+
+    int x = 100;
+    int rc = fork();
+    if (rc < 0) {
+        // fork failed; exit
+        fprintf(stderr, "fork failed\n");
+        exit(1);
+    } else if (rc == 0) {
+        // child (new process)
+        printf("hello, I am child (pid:%d)\n", (int) getpid());
+        printf("hello, I am child x = %d\n", (int)x);
+    } else {
+        // parent goes down this path (original process)
+        printf("hello, I am parent of %d (pid:%d)\n",
+	       rc, (int) getpid());
+              printf("hello, I am parent x = %d\n", (int)x);
+
+    }
+    return 0;
+}
+
+
 ```
 
 
