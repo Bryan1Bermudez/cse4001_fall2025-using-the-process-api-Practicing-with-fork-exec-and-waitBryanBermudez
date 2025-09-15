@@ -51,8 +51,9 @@ Use the Linux in your CSE4001 container. If you are using macOS, you may use the
 1. Write a program that calls `fork()`. Before calling `fork()`, have the main process access a variable (e.g., x) and set its value to something (e.g., 100). What value is the variable in the child process? What happens to the variable when both the child and parent change the value of x?
 
 
+
 ```cpp
-![test](queston 1.png)
+<img width="1895" height="535" alt="queston 1" src="https://github.com/user-attachments/assets/1df4d226-ddc6-4e64-aa91-49d0c4acc5fb" />
 //the value in the child process is the same as the parent process, 100
 // However, when the value changes in the parent both the child and the parent reflect the change
 // if only the child changes the value only the child will reflect the change of x
