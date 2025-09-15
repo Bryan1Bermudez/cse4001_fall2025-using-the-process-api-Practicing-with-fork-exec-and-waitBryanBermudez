@@ -52,7 +52,10 @@ Use the Linux in your CSE4001 container. If you are using macOS, you may use the
 
 
 ```cpp
-// Add your code or answer here. You can also add screenshots showing your program's execution.  
+![test](queston 1.png)
+//the value in the child process is the same as the parent process, 100
+// However, when the value changes in the parent both the child and the parent reflect the change
+// if only the child changes the value only the child will reflect the change of x
 ```
 
 
