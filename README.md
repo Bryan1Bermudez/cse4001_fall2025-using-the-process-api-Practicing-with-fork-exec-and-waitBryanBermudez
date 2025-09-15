@@ -52,8 +52,8 @@ Use the Linux in your CSE4001 container. If you are using macOS, you may use the
 
 
 
-```cpp
 ![queston_1](queston_1.png)
+```cpp
 //the value in the child process is the same as the parent process, 100
 // However, when the value changes in the parent both the child and the parent reflect the change
 // if only the child changes the value only the child will reflect the change of x
