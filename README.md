@@ -92,9 +92,60 @@ int main(int argc, char *argv[])
 
 
 2. Write a program that opens a file (with the `open()` system call) and then calls `fork()` to create a new process. Can both the child and parent access the file descriptor returned by `open()`? What happens when they are writing to the file concurrently, i.e., at the same time?
+![queston_1](queston_2.png)
 
 ```cpp
-// Add your code or answer here. You can also add screenshots showing your program's execution.  
+// Add your code or answer here. You can also add screenshots showing your program's execution.
+// both parent and child can access the same file
+// we can see this by looking at what the child does
+// the child writes to the output file and executes word count in it
+// the parent on the other hands, prints out a simple message and the id
+// both are visable in the output
+// if they both wrote at the same time their outputs might mix however due to atomicity that wont happen
+// in this specific code parent will always be after child due to the wait command
+ #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <fcntl.h>
+#include <assert.h>
+#include <sys/wait.h>
+
+
+int main(int argc, char *argv[])
+{
+  	close(STDOUT_FILENO); 
+  	int id = open("./p4.output", O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU);
+
+    int rc = fork();
+    
+    if (rc < 0) {
+        // fork failed; exit
+        fprintf(stderr, "fork failed\n");
+        exit(1);
+    } else if (rc == 0) {
+	// child: redirect standard output to a file
+	//close(STDOUT_FILENO); 
+	//open("./p4.output", O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU);
+
+	// now exec "wc"...
+        char *myargs[3];
+        myargs[0] = strdup("wc");   // program: "wc" (word count)
+        myargs[1] = strdup("p4.c"); // argument: file to count
+        myargs[2] = NULL;           // marks end of array
+        execvp(myargs[0], myargs);  // runs word count
+
+
+    } else {
+        // parent goes down this path (original process)
+        int wc = wait(NULL);
+        printf("hello, I am parent open id = %d)\n", id);
+
+	assert(wc >= 0);
+    }
+    return 0;
+}
+ 
 ```
 
 3. Write another program using `fork()`.The child process should print “hello”; the parent process should print “goodbye”. You should try to ensure that the child process always prints first; can you do this without calling `wait()` in the parent?
