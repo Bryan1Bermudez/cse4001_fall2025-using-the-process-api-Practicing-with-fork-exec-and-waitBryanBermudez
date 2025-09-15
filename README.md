@@ -150,8 +150,40 @@ int main(int argc, char *argv[])
 
 3. Write another program using `fork()`.The child process should print “hello”; the parent process should print “goodbye”. You should try to ensure that the child process always prints first; can you do this without calling `wait()` in the parent?
 
+![queston_1](queston_3.png)
+
 ```cpp
-// Add your code or answer here. You can also add screenshots showing your program's execution.  
+//it is possible using other methods that force the parent to sleep and or wait. the method i used was using the sleep() function
+// essentially the sleep function causes the excutable to pause for the spefcied in this case 1 second. during this second any other fucntion or exectuable may happen aka the child as such
+// the child will always happen first because the parent will be delyaed
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+
+int main(int argc, char *argv[])
+{
+
+    int rc = fork();
+    if (rc < 0) {
+        // fork failed; exit
+        fprintf(stderr, "fork failed\n");
+        exit(1);
+    } else if (rc == 0) {
+        // child (new process)
+        printf("hello\n");
+
+    } else {
+        // parent goes down this path (original process)
+
+      sleep(1);
+              printf("goodbye\n");
+
+    }
+    return 0;
+}
+
 ```
 
 
