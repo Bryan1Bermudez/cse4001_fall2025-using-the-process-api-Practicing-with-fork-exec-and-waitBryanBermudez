@@ -190,7 +190,70 @@ int main(int argc, char *argv[])
 4. Write a program that calls `fork()` and then calls some form of `exec()` to run the program `/bin/ls`. See if you can try all of the variants of `exec()`, including (on Linux) `execl()`, `execle()`, `execlp()`, `execv()`, `execvp()`, and `execvpe()`. Why do you think there are so many variants of the same basic call?
 
 ```cpp
-// Add your code or answer here. You can also add screenshots showing your program's execution.  
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/wait.h>
+
+
+//Considering that not all of the exec() commands work and that many gave warnings about not enough arguments
+// i think that the different types of exec search for commands in different manners using different types of grammar
+// looking at the base code we can see that when it uses execvp it does so in a much diffrent manner to the way i did
+// and it gave no erros suggesting that its grammer is more "proper" than mine . in other words i think the reason
+//there are so many is to give more flexiablity and ways to access the same files with diffrent ways to get to the
+//same directory or executable
+
+int main(int argc, char *argv[])
+{
+    printf("hello world (pid:%d)\n", (int) getpid());
+    int rc = fork();
+    if (rc < 0) {
+        // fork failed; exit
+        fprintf(stderr, "fork failed\n");
+        exit(1);
+    } else if (rc == 0) {
+        // child (new process)
+        printf("hello, I am child (pid:%d)\n", (int) getpid());
+        char *myargs[3];
+        myargs[0] = strdup("wc");   // program: "wc" (word count)
+        myargs[1] = strdup("p3.c"); // argument: file to count
+        myargs[2] = NULL;           // marks end of array
+
+        //exec("/bin/ls");
+        //Does nothing
+      
+        execl("/bin/ls",NULL);
+        // returns the list of files in the directory
+        
+        //execle("/bin/ls",NULL);
+        //does nothing
+      
+        //execlp("/bin/ls",NULL);
+        // also returns the list of files in the directory
+
+        //execv("/bin/ls",NULL);
+        // also returns the list of files in the directory
+
+        //execvp("/bin/ls",NULL);
+        // also returns the list of files in the directory
+
+        //execvpe("/bin/ls",NULL);
+        //does nothing
+        
+        
+      
+        execvp(myargs[0], myargs);  // runs word count
+        printf("this shouldn't print out");
+    } else {
+        // parent goes down this path (original process)
+        int wc = wait(NULL);
+        printf("hello, I am parent of %d (wc:%d) (pid:%d)\n",
+	       rc, wc, (int) getpid());
+    }
+    return 0;
+}
+  
 ```
 
 5. Now write a program that uses `wait()` to wait for the child process to finish in the parent. What does `wait()` return? What happens if you use `wait()` in the child?
